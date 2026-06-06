@@ -19,3 +19,7 @@ Nossa proposta é desenvolver um jogo de plataforma no qual o jogador controla u
 ### Dia 04/06
 
 **Emanuel**: Clonamos um projeto existente e o estamos usando como base para o novo jogo. Será usado o `a-simple-game` como referência. Lendo os slides sobre libGDX do repositório da disciplina e usando o Copilot no VS Code, perguntei quais pastas e arquivos deveria modificar para começar um projeto novo. Apaguei diretórios desnecessários e acredito que agora o projeto esteja pronto para receber modificações.
+
+### Dia 06/06
+
+**Emanuel**: Editei os arquivos e criei uma hierarquia de pastas. Adicionei o "molde" básico do sistema. Olhei o repositório `gamification-2025b-caua-spamton-g-spamton` que a professora recomendou e encontrei uma playlist de vídeos ensinando como fazer um clone de Super Mario Bros no libGDX, que pensei em usar como referência.
