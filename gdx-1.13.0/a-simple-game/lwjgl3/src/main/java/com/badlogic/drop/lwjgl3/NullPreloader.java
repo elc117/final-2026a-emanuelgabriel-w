@@ -1,6 +1,6 @@
 package com.badlogic.drop.lwjgl3;
 
-import com.badlogic.drop.Preloader;
+import com.badlogic.jogo.Preloader;
 
 public class NullPreloader implements Preloader {
 

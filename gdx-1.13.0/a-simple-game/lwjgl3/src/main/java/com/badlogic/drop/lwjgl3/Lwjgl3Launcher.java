@@ -2,7 +2,7 @@ package com.badlogic.drop.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.drop.Main;
+import com.badlogic.jogo.Jogo;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -12,9 +12,7 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        Main main = new Main();
-        main.preloader = new NullPreloader();
-        return new Lwjgl3Application(main, getDefaultConfiguration());
+        return new Lwjgl3Application(new Jogo(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {

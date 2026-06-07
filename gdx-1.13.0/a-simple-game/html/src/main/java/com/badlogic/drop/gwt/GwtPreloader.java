@@ -1,6 +1,6 @@
 package com.badlogic.drop.gwt;
 
-import com.badlogic.drop.Preloader;
+import com.badlogic.jogo.Preloader;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderCallback;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader.PreloaderState;

@@ -3,7 +3,7 @@ package com.badlogic.drop.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.badlogic.drop.Main;
+import com.badlogic.jogo.Jogo;
 
 /** Launches the GWT application. */
 public class GwtLauncher extends GwtApplication {
@@ -21,8 +21,6 @@ public class GwtLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-            Main main = new Main();
-            main.preloader = new GwtPreloader(this);
-            return main;
+            return new Jogo();
         }
 }

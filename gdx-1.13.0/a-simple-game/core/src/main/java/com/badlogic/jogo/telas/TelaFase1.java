@@ -1,26 +1,55 @@
 package com.badlogic.jogo.telas;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.jogo.Jogo;
 
 public class TelaFase1 implements Screen{
-    
     private Jogo game;
-    Texture texture;
+    private Texture texture;
+    // A camera define 'o que' vemos 
+    private OrthographicCamera gamecamera;
+    // O viewport define 'como' vemos (tamanho da tela) 
+    private Viewport gameviewport;
 
     public TelaFase1(Jogo game) {
         this.game = game;
-        texture = new Texture();
+        texture = new Texture("background.png");
+        gamecamera = new OrthographicCamera();
+        // FitViewport mantém a proporção da tela, adicionando barras pretas se necessário
+        gameviewport = new FitViewport(800, 480, gamecamera);
     }
     
     @Override
     public void show() {
+        // Chamado quando essa tela se torna a tela atual 
     }
 
     @Override
     public void render(float delta) {
+        // Limpa a tela com a cor preta
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        gamecamera.update();
+        // Sincroniza o SpriteBAtch com a visao da camera antes de desenhar 
+        game.batch.setProjectionMatrix(gamecamera.combined);
+        game.batch.begin();
+        // Desenha a textura na posição inicial (x=0, y=0)
+        game.batch.draw(texture, 0, 0);
+        game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
+        // Atualiza a area de visao se o usuário redimensionar a janela
+        // 'true' re-centraliza a camera automaticamente 
+        gameviewport.update(width, height, true);
     }
 
     @Override
@@ -33,8 +62,14 @@ public class TelaFase1 implements Screen{
 
     @Override
     public void hide() {
-
+        // chamado quando o jogo muda para outra tela 
     }
 
+    @Override
+    public void dispose() {
+        if (texture != null) {
+            texture.dispose();
+        }
+    }
 
 }
