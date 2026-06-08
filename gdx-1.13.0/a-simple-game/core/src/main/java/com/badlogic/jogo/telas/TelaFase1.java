@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.jogo.Jogo;
+import com.badlogic.jogo.cenas.Hud;
 
 public class TelaFase1 implements Screen{
     private Jogo game;
@@ -17,13 +18,15 @@ public class TelaFase1 implements Screen{
     private OrthographicCamera gamecamera;
     // O viewport define 'como' vemos (tamanho da tela) 
     private Viewport gameviewport;
+    private Hud hud;
 
     public TelaFase1(Jogo game) {
         this.game = game;
         texture = new Texture("background.png");
         gamecamera = new OrthographicCamera();
         // FitViewport mantém a proporção da tela, adicionando barras pretas se necessário
-        gameviewport = new FitViewport(800, 480, gamecamera);
+        gameviewport = new FitViewport(Jogo.LARGURA, Jogo.ALTURA, gamecamera);
+        hud = new Hud(game.batch);
     }
     
     @Override
@@ -39,6 +42,8 @@ public class TelaFase1 implements Screen{
         gamecamera.update();
         // Sincroniza o SpriteBAtch com a visao da camera antes de desenhar 
         game.batch.setProjectionMatrix(gamecamera.combined);
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
         game.batch.begin();
         // Desenha a textura na posição inicial (x=0, y=0)
         game.batch.draw(texture, 0, 0);

@@ -3,9 +3,12 @@ package com.badlogic.jogo;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.jogo.telas.TelaFase1;
+import com.badlogic.jogo.cenas.Hud;
 
 // Herda de 'Game' (libGDX) para permitir multiplas telas
 public class Jogo extends Game {
+    public static final int LARGURA = 800;
+    public static final int ALTURA = 480; 
     //enva imagens para a placa de video
     //compartilha o mesmo batch entre as telas para economizar memoria
     public SpriteBatch batch;
