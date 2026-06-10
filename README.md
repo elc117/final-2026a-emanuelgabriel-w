@@ -54,9 +54,37 @@ Esse código executa os seguintes passos:
 
 * O Render limpa a tela de preto. Chama `gamecamera.update()` para recalcular a tela caso tenha mudado de tamanho. Depois sincroniza o `spriteBatch` com a visão da câmera, no fim desenha a textura "background" na posição (0,0) (inicio do mundo).
 
+### Dia 08/06 - 10/06
+
+**Emanuel**: Criei a HUD do jogo. A `Table` permite a organização e o posicionamento dos atores de maneira simples no palco (`Stage`).  
+Criei o mapa inicial do jogo usando o Tiled Map Editor, peguei um *background* online no site [craftpix.net](https://craftpix.net/freebies/free-mountain-backgrounds-pixel-art/) e os *tiles* do jogo Super Mario Advance (GBA) no site [spriters-resource.com](https://www.spriters-resource.com/game_boy_advance/sma/asset/51433/).
+
+Tive que alterar o tamanho da tela do jogo para se adequar ao mapa de 640x400, pois acredito que esse tamanho seja o mais adequado quando o jogo for exportado para o itch.io.
+
+```java
+        private TmxMapLoader maploader;
+        private TiledMap map;
+        private OrthogonalTiledMapRenderer renderer;
+
+
+        maploader = new TmxMapLoader();
+        map = maploader.load("level1.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map);
+        gamecamera.position.set(Jogo.LARGURA / 2f, Jogo.ALTURA / 2f, 0);
+```
+
+Porém, na hora de renderizar o mapa para a web, aconteceu um erro: a tela ficava totalmente escura.  
+Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de mapa que eu estava usando (compressão *zlib*) era incompatível com a renderização em HTML. Então, a IA me recomendou utilizar Base64 (sem compressão). Depois da troca, o mapa começou a funcionar normalmente.
+
+![print da fase](/midias/fase1-10_06.png)
+
 ## Fontes
 
 https://github.com/elc117/gamification-2025b-caua-spamton-g-spamton  
 https://youtube.com/playlist?list=PLZm85UZQLd2SXQzsF-a0-pPF6IWDDdrXt&si=IkKlzOw2SrlfgOQy  
 https://libgdx.com/wiki/graphics/2d/orthographic-camera  
 Repositório da Disciplina  
+
+Fundo da fase 1: https://craftpix.net/freebies/free-mountain-backgrounds-pixel-art/  
+Tiles das fases: https://www.spriters-resource.com/game_boy_advance/sma/asset/51433/  
+Tiled Map Editor: https://www.mapeditor.org/
