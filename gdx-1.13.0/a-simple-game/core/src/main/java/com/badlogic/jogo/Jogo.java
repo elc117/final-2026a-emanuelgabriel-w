@@ -7,8 +7,8 @@ import com.badlogic.jogo.cenas.Hud;
 
 // Herda de 'Game' (libGDX) para permitir multiplas telas
 public class Jogo extends Game {
-    public static final int LARGURA = 800;
-    public static final int ALTURA = 480; 
+    public static final int LARGURA = 640;
+    public static final int ALTURA = 400; 
     //enva imagens para a placa de video
     //compartilha o mesmo batch entre as telas para economizar memoria
     public SpriteBatch batch;
