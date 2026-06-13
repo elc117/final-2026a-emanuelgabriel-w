@@ -3,6 +3,7 @@ package com.badlogic.jogo;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.jogo.telas.TelaFase1;
+import com.badlogic.jogo.telas.MainMenu;
 import com.badlogic.jogo.cenas.Hud;
 
 // Herda de 'Game' (libGDX) para permitir multiplas telas
@@ -17,7 +18,7 @@ public class Jogo extends Game {
     public void create() {
         batch = new SpriteBatch();
         //define TelaFase1 como tela inicial do jogo
-        this.setScreen(new TelaFase1(this));
+        this.setScreen(new MainMenu(this));
     }
 
     @Override
