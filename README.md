@@ -76,10 +76,10 @@ Tive que alterar o tamanho da tela do jogo para se adequar ao mapa de 640x400, p
 Porém, na hora de renderizar o mapa para a web, aconteceu um erro: a tela ficava totalmente escura.  
 Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de mapa que eu estava usando (compressão *zlib*) era incompatível com a renderização em HTML. Então, a IA me recomendou utilizar Base64 (sem compressão). Depois da troca, o mapa começou a funcionar normalmente.
 
+![print da fase](/midias/fase1-10_06.png)
+
 ### Dia 12/06
 **Gabriel**: Adicionei um dos personagens usando um sprite do site [craftpix.net](https://craftpix.net/freebies/free-warrior-pixel-art-sprite-sheets/), implementei uma animação quando ele está idle depois de muitas tentativas, também implementei uma movimentação básica para poder testar.
-
-![print da fase](/midias/fase1-10_06.png)
 
 ## Fontes
 
