@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.jogo.Jogo;
 import com.badlogic.jogo.cenas.Hud;
+import com.badlogic.jogo.personagens.Cavaleiro;
 
 public class TelaFase1 implements Screen{
     private Jogo game;
@@ -21,6 +22,8 @@ public class TelaFase1 implements Screen{
     // O viewport define 'como' vemos (tamanho da tela) 
     private Viewport gameViewport;
     private Hud hud;
+    private Cavaleiro cavaleiro;
+    private Texture texturaCavaleiro;
 
     // Ferramentas do TiledMap
     private TmxMapLoader maploader; // Carrega mapa
@@ -41,6 +44,9 @@ public class TelaFase1 implements Screen{
         renderer = new OrthogonalTiledMapRenderer(map);
         // centraliza a camera no meio do mundo
         gamecamera.position.set(Jogo.LARGURA / 2f, Jogo.ALTURA / 2f, 0);
+        //invoca o construtor do cavaleiro
+        texturaCavaleiro = new Texture("Idle.png");
+        cavaleiro = new Cavaleiro(100, 100, texturaCavaleiro);
     }
 
     @Override
@@ -52,6 +58,7 @@ public class TelaFase1 implements Screen{
     public void update(float dt){
         gamecamera.update();
         renderer.setView(gamecamera);
+        cavaleiro.update(dt);
     }
 
     @Override
@@ -63,6 +70,12 @@ public class TelaFase1 implements Screen{
         
         // desenha mapa
         renderer.render();
+
+        // desenha o cavaleiro
+        game.batch.setProjectionMatrix(gamecamera.combined);
+        game.batch.begin();
+        cavaleiro.render(game.batch);
+        game.batch.end();
 
         // desenha o hud por cima
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -96,6 +109,7 @@ public class TelaFase1 implements Screen{
         map.dispose();
         renderer.dispose();
         hud.stage.dispose();
+        texturaCavaleiro.dispose();
     }
 
 }
