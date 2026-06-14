@@ -81,7 +81,7 @@ Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de m
 ### Dia 12/06
 **Gabriel**: Adicionei um dos personagens usando um sprite do site [craftpix.net](https://craftpix.net/freebies/free-warrior-pixel-art-sprite-sheets/), implementei uma animação quando ele está idle depois de muitas tentativas, também implementei uma movimentação básica para poder testar.
 
-### Dia 12/06
+### Dia 13/06
 **Gabriel**: Troquei a movimentação básica por uma melhor com física utilizando a biblioteca Box2D, adicionei colisão no chão, a parte mais trabalhosa foi fazer funcionar a detecção do personagem com o chão pra fazer ele pular.
 
 ## Fontes
