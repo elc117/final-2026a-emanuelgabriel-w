@@ -84,6 +84,11 @@ Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de m
 ### Dia 13/06
 **Gabriel**: Troquei a movimentação básica por uma melhor com física utilizando a biblioteca Box2D, adicionei colisão no chão, a parte mais trabalhosa foi fazer funcionar a detecção do personagem com o chão pra fazer ele pular.
 
+### Dia 14/06
+**Gabriel**: Adicionei o projeto na jam criada pela professora no itch.io: https://gabuz52.itch.io/advancetogether
+
+Decidimos que o nome do jogo será Advance Together.
+
 ## Fontes
 
 https://github.com/elc117/gamification-2025b-caua-spamton-g-spamton  
