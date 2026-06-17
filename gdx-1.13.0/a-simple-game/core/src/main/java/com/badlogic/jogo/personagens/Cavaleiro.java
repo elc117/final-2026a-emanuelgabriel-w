@@ -39,7 +39,7 @@ public class Cavaleiro extends Personagem {
         body.setLinearDamping(0f);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(LARGURA_SPRITE / 2, LARGURA_SPRITE / 2);
+        shape.setAsBox(30, 40);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

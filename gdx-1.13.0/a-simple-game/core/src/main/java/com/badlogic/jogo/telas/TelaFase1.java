@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.jogo.Jogo;
 import com.badlogic.jogo.cenas.Hud;
 import com.badlogic.jogo.personagens.Cavaleiro;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class TelaFase1 implements Screen{
@@ -34,6 +34,79 @@ public class TelaFase1 implements Screen{
     private OrthogonalTiledMapRenderer renderer; // Pinta o mapa na tela
     private World world;
 
+    // metodo para ler a camada "ground" do level1, transformando cada retangulo desenhado
+    // no Tiled em um corpo fisico
+    private void criarColisoesDoMapa(){
+        // pega os objetos desenhados da camada "ground"
+        com.badlogic.gdx.maps.MapObjects objetos = map.getLayers().get("ground").getObjects();
+
+        // percorre cada retangulo de colisao desenhado
+        for (com.badlogic.gdx.maps.objects.RectangleMapObject obj :
+                objetos.getByType(com.badlogic.gdx.maps.objects.RectangleMapObject.class)) {
+                    
+            // pega as coordenadas e o tamanho do retangulo em pixels.
+            com.badlogic.gdx.math.Rectangle rect = obj.getRectangle();
+            
+            // define que o corpo é estatico
+            BodyDef bdef = new BodyDef();
+            bdef.type = BodyDef.BodyType.StaticBody;
+
+            // Box2d posiciona o corpo pelo centro, entao soma metade da largura/altura 
+            // para achar o centro do retangulo
+            bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2);
+            
+            // cria o corpo dentro do mundo
+            Body body = world.createBody(bdef);
+            // marca o corpo como "chao"
+            body.setUserData("chao");
+            
+            // define o formato do corpo como um retangulo
+            // usa metade da largura/altura porque setAsBox espara "raio" nao o total
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(rect.width / 2, rect.height / 2);
+
+            // a fixture conecta o formato (shape) ao corpo (body)
+            FixtureDef fdef = new FixtureDef();
+            fdef.shape = shape;
+            fdef.friction = 0.4f;
+
+            body.createFixture(fdef);
+            shape.dispose();
+        }
+    }
+
+    private void criarEspinhosDoMapa() {
+        com.badlogic.gdx.maps.MapObjects objetos = map.getLayers().get("spikes").getObjects();
+
+        // percorre os espinhos que são polygonais
+        for (com.badlogic.gdx.maps.objects.PolygonMapObject obj : 
+            objetos.getByType(com.badlogic.gdx.maps.objects.PolygonMapObject.class)) {
+
+                com.badlogic.gdx.math.Polygon polygon = obj.getPolygon();
+
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyDef.BodyType.StaticBody;
+                // a posiçao do retangulo no Tiled já vem com x,y absolutos
+                bdef.position.set(polygon.getX(), polygon.getY());
+
+                Body body = world.createBody(bdef);
+                // marca esse corpo como "spike" - serva depois para dectar se o personagem tocou em algo que
+                // causa dano
+                body.setUserData("spike");
+
+                PolygonShape shape = new PolygonShape();
+                // getTransformedVertices() retorna os vértices já ajustados
+                shape.set(polygon.getTransformedVertices());
+
+                FixtureDef fdef = new FixtureDef();
+                fdef.shape = shape;
+                // nao empurra o personagem, apenas detecta quando algo o toca
+                fdef.isSensor = true;
+
+                body.createFixture(fdef);
+                shape.dispose();
+            }
+    }
 
     public TelaFase1(Jogo game) {
         this.game = game;
@@ -70,20 +143,6 @@ public class TelaFase1 implements Screen{
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
-        //corpo físico do chão
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        groundBodyDef.position.set(320, 25);
-        Body groundBody = world.createBody(groundBodyDef);
-        groundBody.setUserData("chao");
-        PolygonShape groundShape = new PolygonShape();
-        groundShape.setAsBox(320, 25);
-        FixtureDef groundFixtureDef = new FixtureDef();
-        groundFixtureDef.shape = groundShape;
-        groundFixtureDef.friction = 0.4f;
-
-        groundBody.createFixture(groundFixtureDef);
-        groundShape.dispose();
 
         // FitViewport mantém a proporção da tela, adicionando barras pretas se necessário
         gameViewport = new FitViewport(Jogo.LARGURA, Jogo.ALTURA, gamecamera);
@@ -93,6 +152,9 @@ public class TelaFase1 implements Screen{
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        criarColisoesDoMapa();
+        criarEspinhosDoMapa();
         // centraliza a camera no meio do mundo
         gamecamera.position.set(Jogo.LARGURA / 2f, Jogo.ALTURA / 2f, 0);
         //invoca o construtor do cavaleiro
