@@ -17,6 +17,7 @@ import com.badlogic.jogo.telas.TelaFase1;
 public class MainMenu implements Screen {
     private Jogo game;
     private Stage stage;
+    // carrega os visuais do arquivo uiskin.json
     private Skin skin;
     private Texture backgroundMenuTexture;
 
@@ -33,9 +34,11 @@ public class MainMenu implements Screen {
         TextButton playButton = new TextButton("Jogar", skin);
         TextButton exitButton = new TextButton("Sair", skin);
 
+        // adiciona um "escutador" ao botao para detectar cliques
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                // troca para a fase 1
                 game.setScreen(new TelaFase1(game));
             }
         });
@@ -50,7 +53,7 @@ public class MainMenu implements Screen {
         table.add(playButton).padBottom(20).width(200).height(50);
         table.row();
         table.add(exitButton).width(200).height(50);
-
+        // fiz que 'stage' vai receber os cliques
         Gdx.input.setInputProcessor(stage);
 
     }

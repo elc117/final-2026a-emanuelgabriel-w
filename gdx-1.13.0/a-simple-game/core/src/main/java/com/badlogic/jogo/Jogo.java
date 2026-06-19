@@ -17,7 +17,7 @@ public class Jogo extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        //define TelaFase1 como tela inicial do jogo
+        //define MainMenu como tela inicial do jogo
         this.setScreen(new MainMenu(this));
     }
 
