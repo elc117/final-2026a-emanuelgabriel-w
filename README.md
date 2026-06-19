@@ -84,10 +84,48 @@ Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de m
 ### Dia 13/06
 **Gabriel**: Troquei a movimentação básica por uma melhor com física utilizando a biblioteca Box2D, adicionei colisão no chão, a parte mais trabalhosa foi fazer funcionar a detecção do personagem com o chão pra fazer ele pular.
 
+**Emanuel**: Adicionei o menu inicial do jogo, ele funciona de maneira semelhante ao `Hud.java`. Foram adicionado os botões de "Jogar" e "Sair" estilizados pelo arquivo `uiskin.json`. O sistema de botões usa reatividade para atualizar a tela quando um botão for clicado, ela funciona por conta do `setInputProcessor(stage)`.
+```java
+        playButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new TelaFase1(game));
+            }
+        });
+
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+        ...
+        Gdx.input.setInputProcessor(stage);
+```
+
 ### Dia 14/06
 **Gabriel**: Adicionei o projeto na jam criada pela professora no itch.io: https://gabuz52.itch.io/advancetogether
 
 Decidimos que o nome do jogo será Advance Together.
+
+### Dia 17/06
+**Emanuel**: Implementei a física sobre os objetos do mapa, sendo essa, provavelmente, a parte mais complexa do projeto.
+Criei os métodos `criarColisoesDoMapa` e `criarEspinhosDoMapa`. Eles leem as camadas que eu criei no Tiled (ground e spikes) e instanciam a física usando o Box2D.
+* **BodyDef**: Define onde o objeto nasce e o seu tipo. Em ambos os casos, está como `StaticBody`, o que significa que ele não é afetado pela gravidade e nem se mexe.
+* **Shape**: Pega a forma geométrica do mapa, usa `setAsBox` para o chão (que é um retângulo) e `getTransformedVertices` para os espinhos, pois sua colisão é poligonal.
+* **Fixture**: É o que conecta a forma ao corpo do objeto e dá as suas propriedades físicas. No chão, é aplicado o atrito (`fdef.friction = 0.4f`). Nos espinhos, é aplicado `fdef.isSensor = true`, o que não os deixa "sólidos" quando o personagem toca neles; apenas identifica o contato, o que pode ser útil quando formos implementar o dano.
+O que mais me deixou confuso foram os cálculos matemáticos envolvendo os retângulos do chão. Então, enviei os códigos para o Gemini e perguntei por que é necessário aplicar essa lógica ao chão e não aos espinhos.
+```java
+    bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2);
+
+    ...
+
+    PolygonShape shape = new PolygonShape();
+    shape.setAsBox(rect.width / 2, rect.height / 2);
+
+```
+Então, eu entendi que o Tiled salva a coordenada do retângulo no canto inferior esquerdo do bloco, mas, como o Box2D precisa fazer os cálculos matemáticos para o jogo, a posição do corpo não pode ser nas quinas; ele precisa do centro do bloco. É por isso que é passada a metade da largura e a metade da altura do bloco. O método `setAsBox` usa esses valores divididos para construir a colisão, expandindo-a de dentro para fora.
+Já os espinhos usam a função `getTransformedVertices()`, esse método já dá as coordenadas de cada ponta do triângulo da forma que elas já estão no mundo, por isso não é necessário essa matemática.
 
 ## Fontes
 
