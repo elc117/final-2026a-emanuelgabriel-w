@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,14 +15,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.jogo.Jogo;
 import com.badlogic.jogo.telas.TelaFase1;
 
-public class MainMenu implements Screen {
+public class TelaGameOver implements Screen {
     private Jogo game;
     private Stage stage;
     // carrega os visuais do arquivo uiskin.json
     private Skin skin;
     private Texture backgroundMenuTexture;
 
-    public MainMenu(Jogo game) {
+    public TelaGameOver(Jogo game) {
         this.game = game;
         stage = new Stage(new FitViewport(Jogo.LARGURA, Jogo.ALTURA));
         skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -32,12 +32,12 @@ public class MainMenu implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label tituloLabel = new Label("Advance Together", skin);
-        TextButton playButton = new TextButton("Jogar", skin);
+        Label gameOverLabel = new Label("Game Over", skin);
+        TextButton retryButton = new TextButton("Tentar novamente", skin);
         TextButton exitButton = new TextButton("Sair", skin);
 
         // adiciona um "escutador" ao botao para detectar cliques
-        playButton.addListener(new ChangeListener() {
+        retryButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // troca para a fase 1
@@ -51,10 +51,10 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
-        
-        table.add(tituloLabel).padBottom(20).width(200).height(50).center();
+
+        table.add(gameOverLabel).padBottom(20).width(200).height(50).center();
         table.row();
-        table.add(playButton).padBottom(20).width(200).height(50);
+        table.add(retryButton).padBottom(20).width(200).height(50);
         table.row();
         table.add(exitButton).width(200).height(50);
         // fiz que 'stage' vai receber os cliques

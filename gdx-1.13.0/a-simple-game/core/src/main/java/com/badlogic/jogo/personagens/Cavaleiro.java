@@ -33,18 +33,19 @@ public class Cavaleiro extends Personagem {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x + LARGURA_SPRITE / 2, y + LARGURA_SPRITE / 2);
+        bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
         body.setUserData("cavaleiro");
         body.setLinearDamping(0f);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(30, 40);
+        shape.setAsBox(15, 47);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.4f;
+        fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
 
         body.createFixture(fixtureDef);

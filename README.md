@@ -102,6 +102,7 @@ Resolvi jogar o erro do terminal no Claude.ai, e ali descobri que o formato de m
         ...
         Gdx.input.setInputProcessor(stage);
 ```
+![print do menu](/midias/telaMenu-20_06.png)
 
 ### Dia 14/06
 **Gabriel**: Adicionei o projeto na jam criada pela professora no itch.io: https://gabuz52.itch.io/advancetogether
@@ -113,7 +114,7 @@ Decidimos que o nome do jogo será Advance Together.
 Criei os métodos `criarColisoesDoMapa` e `criarEspinhosDoMapa`. Eles leem as camadas que eu criei no Tiled (ground e spikes) e instanciam a física usando o Box2D.
 * **BodyDef**: Define onde o objeto nasce e o seu tipo. Em ambos os casos, está como `StaticBody`, o que significa que ele não é afetado pela gravidade e nem se mexe.
 * **Shape**: Pega a forma geométrica do mapa, usa `setAsBox` para o chão (que é um retângulo) e `getTransformedVertices` para os espinhos, pois sua colisão é poligonal.
-* **Fixture**: É o que conecta a forma ao corpo do objeto e dá as suas propriedades físicas. No chão, é aplicado o atrito (`fdef.friction = 0.4f`). Nos espinhos, é aplicado `fdef.isSensor = true`, o que não os deixa "sólidos" quando o personagem toca neles; apenas identifica o contato, o que pode ser útil quando formos implementar o dano.
+* **Fixture**: É o que conecta a forma ao corpo do objeto e dá as suas propriedades físicas. No chão, é aplicado o atrito (`fdef.friction = 0.4f`). Nos espinhos, é aplicado `fdef.isSensor = true`, o que não os deixa "sólidos" quando o personagem toca neles; apenas identifica o contato, o que pode ser útil quando formos implementar o dano.  
 O que mais me deixou confuso foram os cálculos matemáticos envolvendo os retângulos do chão. Então, enviei os códigos para o Gemini e perguntei por que é necessário aplicar essa lógica ao chão e não aos espinhos.
 ```java
     bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -126,6 +127,29 @@ O que mais me deixou confuso foram os cálculos matemáticos envolvendo os retâ
 ```
 Então, eu entendi que o Tiled salva a coordenada do retângulo no canto inferior esquerdo do bloco, mas, como o Box2D precisa fazer os cálculos matemáticos para o jogo, a posição do corpo não pode ser nas quinas; ele precisa do centro do bloco. É por isso que é passada a metade da largura e a metade da altura do bloco. O método `setAsBox` usa esses valores divididos para construir a colisão, expandindo-a de dentro para fora.
 Já os espinhos usam a função `getTransformedVertices()`, esse método já dá as coordenadas de cada ponta do triângulo da forma que elas já estão no mundo, por isso não é necessário essa matemática.
+![print da fase atualizada](/midias/fase1-20_06.png)
+
+### Dia 20/06
+**Emanuel**: Criei a tela de Game Over do jogo. Ela funciona da mesma maneira que a tela de menu, mas é acionada no código, por enquanto, apenas quando o jogador cai no buraco. 
+```java
+    if (cavaleiro.caiuNoBuraco()){
+        game.setScreen(new TelaGameOver(game));
+    }
+```  
+Adicionei a lógica de cair no buraco na classe do personagem, que é acionada quando ele ultrapassa os limites da tela do mapa.
+```java
+    public boolean caiuNoBuraco(){
+        return y < -100;
+    }
+```
+![print da tela de Game Over](/midias/telaGameOver-20_06.png)  
+Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar" o personagem na parede.
+
+## Como rodar no VScode
+cd gdx-1.13.0/a-simple-game  
+./gradlew html:dist  
+cd html/build/dist  
+python -m http.server  
 
 ## Fontes
 

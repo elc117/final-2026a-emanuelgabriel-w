@@ -62,6 +62,10 @@ public abstract class Personagem {
         return y;
     }
 
+    public boolean caiuNoBuraco(){
+        return y < -100;
+    }
+
     public void dispose() {
         if (textura != null) {
             textura.dispose();

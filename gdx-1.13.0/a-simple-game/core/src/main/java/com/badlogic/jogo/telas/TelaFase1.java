@@ -18,6 +18,7 @@ import com.badlogic.jogo.cenas.Hud;
 import com.badlogic.jogo.personagens.Cavaleiro;
 import com.badlogic.gdx.physics.box2d.*;
 
+
 public class TelaFase1 implements Screen{
     private Jogo game;
     // A camera define 'o que' vemos 
@@ -33,6 +34,7 @@ public class TelaFase1 implements Screen{
     private TiledMap map; // Guarda os dados
     private OrthogonalTiledMapRenderer renderer; // Pinta o mapa na tela
     private World world;
+    private Box2DDebugRenderer debugRenderer;
 
     // metodo para ler a camada "ground" do level1, transformando cada retangulo desenhado
     // no Tiled em um corpo fisico
@@ -112,6 +114,7 @@ public class TelaFase1 implements Screen{
         this.game = game;
         gamecamera = new OrthographicCamera();
         world = new World(new Vector2(0, -200f), true);
+        debugRenderer = new Box2DDebugRenderer(); 
         // configura o contato entre o personagem e o chão
         world.setContactListener(new ContactListener() {
             @Override
@@ -173,6 +176,10 @@ public class TelaFase1 implements Screen{
         gamecamera.update();
         renderer.setView(gamecamera);
         cavaleiro.update(dt);
+
+        if (cavaleiro.caiuNoBuraco()){
+            game.setScreen(new TelaGameOver(game));
+        }
     }
 
     @Override
@@ -189,6 +196,7 @@ public class TelaFase1 implements Screen{
         game.batch.setProjectionMatrix(gamecamera.combined);
         game.batch.begin();
         cavaleiro.render(game.batch);
+    //    debugRenderer.render(world, gamecamera.combined);
         game.batch.end();
 
         // desenha o hud por cima
@@ -225,6 +233,8 @@ public class TelaFase1 implements Screen{
         hud.stage.dispose();
         texturaCavaleiro.dispose();
         world.dispose(); 
+        cavaleiro.dispose();
+        debugRenderer.dispose();
     }
 
 }
