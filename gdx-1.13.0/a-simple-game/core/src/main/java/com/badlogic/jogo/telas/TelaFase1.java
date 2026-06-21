@@ -35,6 +35,7 @@ public class TelaFase1 implements Screen{
     private OrthogonalTiledMapRenderer renderer; // Pinta o mapa na tela
     private World world;
     private Box2DDebugRenderer debugRenderer;
+    private boolean passouDeFase = false;
 
     // metodo para ler a camada "ground" do level1, transformando cada retangulo desenhado
     // no Tiled em um corpo fisico
@@ -110,11 +111,39 @@ public class TelaFase1 implements Screen{
             }
     }
 
+    private void criarPortaDoMapa() {
+        MapObjects objetos = map.getLayers().get("door").getObjects();
+
+        for (com.badlogic.gdx.maps.objects.RectangleMapObject obj :
+             objetos.getByType(com.badlogic.gdx.maps.objects.RectangleMapObject.class)) {
+
+                com.badlogic.gdx.math.Rectangle rect = obj.getRectangle();
+
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyDef.BodyType.StaticBody;
+                bdef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2);
+                
+                Body body = world.createBody(bdef);
+                body.setUserData("porta");
+
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(rect.width / 2, rect.height / 2);
+
+                FixtureDef fdef = new FixtureDef();
+                fdef.shape = shape;
+                fdef.isSensor = true;
+
+                body.createFixture(fdef);
+                shape.dispose();
+        }
+    }
+
     public TelaFase1(Jogo game) {
         this.game = game;
         gamecamera = new OrthographicCamera();
         world = new World(new Vector2(0, -200f), true);
-        debugRenderer = new Box2DDebugRenderer(); 
+        debugRenderer = new Box2DDebugRenderer();
+         
         // configura o contato entre o personagem e o chão
         world.setContactListener(new ContactListener() {
             @Override
@@ -140,6 +169,10 @@ public class TelaFase1 implements Screen{
                 if (userDataB != null && userDataB.equals("cavaleiro")) {
                     cavaleiro.deixouChao();
                 }
+                if (("porta".equals(userDataA) && "cavaleiro".equals(userDataB)) ||
+                    ("porta".equals(userDataB) && "cavaleiro".equals(userDataA))) {
+                    passouDeFase = true;
+                }
             }
             @Override
             public void preSolve(Contact contact, Manifold oldManifold) {}
@@ -158,6 +191,7 @@ public class TelaFase1 implements Screen{
 
         criarColisoesDoMapa();
         criarEspinhosDoMapa();
+        criarPortaDoMapa();
         // centraliza a camera no meio do mundo
         gamecamera.position.set(Jogo.LARGURA / 2f, Jogo.ALTURA / 2f, 0);
         //invoca o construtor do cavaleiro
@@ -180,6 +214,9 @@ public class TelaFase1 implements Screen{
         if (cavaleiro.caiuNoBuraco()){
             game.setScreen(new TelaGameOver(game));
         }
+        if (passouDeFase) {
+        game.setScreen(new TelaVitoria(game));
+        }
     }
 
     @Override
@@ -196,9 +233,9 @@ public class TelaFase1 implements Screen{
         game.batch.setProjectionMatrix(gamecamera.combined);
         game.batch.begin();
         cavaleiro.render(game.batch);
-    //    debugRenderer.render(world, gamecamera.combined);
         game.batch.end();
 
+        debugRenderer.render(world, gamecamera.combined);
         // desenha o hud por cima
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();

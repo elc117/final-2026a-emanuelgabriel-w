@@ -15,14 +15,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.jogo.Jogo;
 import com.badlogic.jogo.telas.TelaFase1;
 
-public class MainMenu implements Screen {
+public class TelaVitoria implements Screen {
     private Jogo game;
     private Stage stage;
     // carrega os visuais do arquivo uiskin.json
     private Skin skin;
     private Texture backgroundMenuTexture;
 
-    public MainMenu(Jogo game) {
+    public TelaVitoria(Jogo game) {
         this.game = game;
         stage = new Stage(new FitViewport(Jogo.LARGURA, Jogo.ALTURA));
         skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -33,7 +33,7 @@ public class MainMenu implements Screen {
         table.center();
         stage.addActor(table);
 
-        Label tituloLabel = new Label("Advance Together", skin);
+        Label tituloLabel = new Label("Parabens! Finalizou a fase", skin);
         TextButton playButton = new TextButton("Jogar", skin);
         TextButton exitButton = new TextButton("Sair", skin);
 

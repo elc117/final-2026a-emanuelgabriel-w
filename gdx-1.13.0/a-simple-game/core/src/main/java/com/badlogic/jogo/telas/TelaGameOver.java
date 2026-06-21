@@ -26,10 +26,11 @@ public class TelaGameOver implements Screen {
         this.game = game;
         stage = new Stage(new FitViewport(Jogo.LARGURA, Jogo.ALTURA));
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-        backgroundMenuTexture = new Texture(Gdx.files.internal("background_menu.gif"));
+        backgroundMenuTexture = new Texture(Gdx.files.internal("background_gameOver.gif"));
 
         Table table = new Table();
         table.setFillParent(true);
+        table.center();
         stage.addActor(table);
 
         Label gameOverLabel = new Label("Game Over", skin);
@@ -52,7 +53,7 @@ public class TelaGameOver implements Screen {
             }
         });
 
-        table.add(gameOverLabel).padBottom(20).width(200).height(50).center();
+        table.add(gameOverLabel).padBottom(20).center();
         table.row();
         table.add(retryButton).padBottom(20).width(200).height(50);
         table.row();
