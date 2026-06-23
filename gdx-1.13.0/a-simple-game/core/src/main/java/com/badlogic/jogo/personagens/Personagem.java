@@ -3,6 +3,8 @@ package com.badlogic.jogo.personagens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 
 public abstract class Personagem {
     protected float x, y;
@@ -12,6 +14,12 @@ public abstract class Personagem {
     protected Body body;
     protected World world;
     protected boolean noChao = false;
+    protected boolean controlavel = false;
+    
+    // Constantes de movimento
+    protected static final float VELOCIDADE_MOVIMENTO = 150f;
+    protected static final float FORCA_PULO = 120f;
+    protected static final float LARGURA_SPRITE = 96f;
 
     public Personagem(float x, float y, float velocidade, Texture textura) {
         this.x = x;
@@ -20,11 +28,50 @@ public abstract class Personagem {
         this.textura = textura;
         this.ativo = false;
     }
-    public abstract void update(float dt);
+
+    // lógica comum de movimento
+    protected void atualizarMovimento(float dt) {
+        if (!controlavel) return;
+        float velX = 0;
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+            velX = VELOCIDADE_MOVIMENTO;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            velX = -VELOCIDADE_MOVIMENTO;
+        }
+        
+        body.setLinearVelocity(velX, body.getLinearVelocity().y);
+
+        // Pulo
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W) || 
+            Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) && (y < 30 || noChao)) {
+            body.setLinearVelocity(body.getLinearVelocity().x, FORCA_PULO);
+            noChao = false;
+        }
+
+        // Atualiza posição
+        x = body.getPosition().x - LARGURA_SPRITE / 2;
+        y = body.getPosition().y - LARGURA_SPRITE / 2;
+
+        // Limites da tela
+        if (x < 0) {
+            x = 0;
+            body.setTransform(LARGURA_SPRITE / 2, body.getPosition().y, 0);
+        }
+        if (x + LARGURA_SPRITE > 640) {
+            x = 640 - LARGURA_SPRITE;
+            body.setTransform(640 - LARGURA_SPRITE / 2, body.getPosition().y, 0);
+        }
+    }
     
-    public abstract void render(SpriteBatch batch);
     
-    public abstract void usarHabilidade();
+    public void setControlavel(boolean controlavel) {
+        this.controlavel = controlavel;
+    }
+    
+    public boolean isControlavel() {
+        return controlavel;
+    }
 
     public void setAtivo(boolean estado) {
         this.ativo = estado;
@@ -62,7 +109,7 @@ public abstract class Personagem {
         return y;
     }
 
-    public boolean caiuNoBuraco(){
+    public boolean caiuNoBuraco() {
         return y < -100;
     }
 
@@ -71,4 +118,9 @@ public abstract class Personagem {
             textura.dispose();
         }
     }
+
+    public abstract void update(float dt);
+    public abstract void render(SpriteBatch batch);
+    public abstract void usarHabilidade();
+    
 }

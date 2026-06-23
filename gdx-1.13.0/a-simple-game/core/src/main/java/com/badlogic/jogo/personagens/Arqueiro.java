@@ -6,15 +6,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
 
-public class Cavaleiro extends Personagem {
+public class Arqueiro extends Personagem {
     private Animation<TextureRegion> animacaoIdle;
     private float tempoAnimacao = 0;
     
-    public Cavaleiro(float x, float y, Texture texturaSpritesheet, World world) {
+    public Arqueiro(float x, float y, Texture texturaSpritesheet, World world) {
         super(x, y, 200, null);
         this.world = world;
         
-        TextureRegion[][] tmp = TextureRegion.split(texturaSpritesheet, 96, 96);
+        TextureRegion[][] tmp = TextureRegion.split(texturaSpritesheet, 128, 128);
         TextureRegion[] frames = tmp[0]; 
         
         animacaoIdle = new Animation<>(0.15f, frames);
@@ -30,7 +30,7 @@ public class Cavaleiro extends Personagem {
         bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
-        body.setUserData("cavaleiro");
+        body.setUserData("arqueiro");
         body.setLinearDamping(0f);
 
         PolygonShape shape = new PolygonShape();
@@ -41,11 +41,13 @@ public class Cavaleiro extends Personagem {
         fixtureDef.density = 1f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
+
         fixtureDef.filter.categoryBits = 0x0002;  // Personagens
         fixtureDef.filter.maskBits = 0x0001;      // Colidem com ambiente
-        
+
         body.createFixture(fixtureDef);
         shape.dispose();
+
     }
 
     @Override
@@ -64,4 +66,3 @@ public class Cavaleiro extends Personagem {
     public void usarHabilidade() {
     }
 }
-

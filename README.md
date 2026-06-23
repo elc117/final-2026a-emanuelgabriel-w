@@ -145,6 +145,9 @@ Adicionei a lógica de cair no buraco na classe do personagem, que é acionada q
 ![print da tela de Game Over](/midias/telaGameOver-20_06.png)  
 Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar" o personagem na parede.
 
+### Dia 22/06
+**Gabriel**: Adicionei os outros 2 personagens que faltavam, eles estavam colidindo e deslizando entre si, então configurei um filtro pra remover essa colisão, ainda tem alguns problemas de hitbox desalinhada e atualização da textura com a hitbox que vou arrumar amanhã, também preogramei pro jogador poder mudar o personagem que está utilizando apertando a tecla C.
+
 ## Como rodar no VScode
 cd gdx-1.13.0/a-simple-game  
 ./gradlew html:dist  

@@ -6,15 +6,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
 
-public class Cavaleiro extends Personagem {
+public class Mago extends Personagem {
     private Animation<TextureRegion> animacaoIdle;
     private float tempoAnimacao = 0;
     
-    public Cavaleiro(float x, float y, Texture texturaSpritesheet, World world) {
+    public Mago(float x, float y, Texture texturaSpritesheet, World world) {
         super(x, y, 200, null);
         this.world = world;
         
-        TextureRegion[][] tmp = TextureRegion.split(texturaSpritesheet, 96, 96);
+        TextureRegion[][] tmp = TextureRegion.split(texturaSpritesheet, 128, 128);
         TextureRegion[] frames = tmp[0]; 
         
         animacaoIdle = new Animation<>(0.15f, frames);
@@ -30,7 +30,7 @@ public class Cavaleiro extends Personagem {
         bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
-        body.setUserData("cavaleiro");
+        body.setUserData("mago");
         body.setLinearDamping(0f);
 
         PolygonShape shape = new PolygonShape();
@@ -64,4 +64,3 @@ public class Cavaleiro extends Personagem {
     public void usarHabilidade() {
     }
 }
-

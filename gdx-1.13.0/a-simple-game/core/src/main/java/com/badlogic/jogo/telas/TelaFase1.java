@@ -1,6 +1,7 @@
 package com.badlogic.jogo.telas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,8 +16,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.jogo.Jogo;
 import com.badlogic.jogo.cenas.Hud;
+import com.badlogic.jogo.personagens.Arqueiro;
 import com.badlogic.jogo.personagens.Cavaleiro;
+import com.badlogic.jogo.personagens.Mago;
+import com.badlogic.jogo.personagens.Personagem;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+
 
 
 public class TelaFase1 implements Screen{
@@ -26,9 +32,13 @@ public class TelaFase1 implements Screen{
     // O viewport define 'como' vemos (tamanho da tela) 
     private Viewport gameViewport;
     private Hud hud;
-
-    private Cavaleiro cavaleiro;
+    // personagens
     private Texture texturaCavaleiro;
+    private Texture texturaArqueiro;
+    private Texture texturaMago;
+    private Array<Personagem> personagens;
+    private int indiceAtivo = 0;
+    private Texture texturaPersonagem;
     // Ferramentas do TiledMap
     private TmxMapLoader maploader; // Carrega mapa
     private TiledMap map; // Guarda os dados
@@ -144,42 +154,72 @@ public class TelaFase1 implements Screen{
         world = new World(new Vector2(0, -200f), true);
         debugRenderer = new Box2DDebugRenderer();
          
-        // configura o contato entre o personagem e o chão
+        // Cria a array com os 3 personagens
+        personagens = new Array<>();
+        
+        texturaCavaleiro = new Texture("cavaleiro.png");
+        personagens.add(new Cavaleiro(100, 300, texturaCavaleiro, world));
+        
+        texturaArqueiro = new Texture("arqueiro.png"); // Mude se tiver textura diferente
+        personagens.add(new Arqueiro(100, 300, texturaArqueiro, world));
+        
+        texturaMago = new Texture("mago.png"); // Mude se tiver textura diferente
+        personagens.add(new Mago(100, 300, texturaMago, world));
+
+        // configura o contato entre os personagens e o chão
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                Object userDataA = contact.getFixtureA().getBody().getUserData();
-                Object userDataB = contact.getFixtureB().getBody().getUserData();
-
-                if (userDataA != null && userDataA.equals("cavaleiro")) {
-                    cavaleiro.noChao();
-                }
-                if (userDataB != null && userDataB.equals("cavaleiro")) {
-                    cavaleiro.noChao();
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
+                
+                // Verifica qual personagem tocou em algo
+                for (Personagem p : personagens) {
+                    if (p.getBody() == bodyA || p.getBody() == bodyB) {
+                        Object userDataOutro = (p.getBody() == bodyA) ? 
+                            bodyB.getUserData() : bodyA.getUserData();
+                        
+                        if ("chao".equals(userDataOutro)) {
+                            p.noChao();
+                        }
+                    }
                 }
             }
+            
             @Override
             public void endContact(Contact contact) {
-                Object userDataA = contact.getFixtureA().getBody().getUserData();
-                Object userDataB = contact.getFixtureB().getBody().getUserData();
-
-                if (userDataA != null && userDataA.equals("cavaleiro")) {
-                    cavaleiro.deixouChao();
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
+                Object userDataA = bodyA.getUserData();
+                Object userDataB = bodyB.getUserData();
+                
+                // Verifica qual personagem saiu do contato
+                for (Personagem p : personagens) {
+                    if (p.getBody() == bodyA || p.getBody() == bodyB) {
+                        Object userDataOutro = (p.getBody() == bodyA) ? 
+                            bodyB.getUserData() : bodyA.getUserData();
+                        
+                        if ("chao".equals(userDataOutro)) {
+                            p.deixouChao();
+                        }
+                    }
                 }
-                if (userDataB != null && userDataB.equals("cavaleiro")) {
-                    cavaleiro.deixouChao();
-                }
-                if (("porta".equals(userDataA) && "cavaleiro".equals(userDataB)) ||
-                    ("porta".equals(userDataB) && "cavaleiro".equals(userDataA))) {
+                
+                // Detecta porta (só o ativo passa de fase)
+                Personagem ativo = personagens.get(indiceAtivo);
+                if ((ativo.getBody() == bodyA && "porta".equals(userDataB)) ||
+                    (ativo.getBody() == bodyB && "porta".equals(userDataA))) {
                     passouDeFase = true;
                 }
             }
+        
             @Override
             public void preSolve(Contact contact, Manifold oldManifold) {}
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
-
+        personagens.get(0).setControlavel(true);
+        
         // FitViewport mantém a proporção da tela, adicionando barras pretas se necessário
         gameViewport = new FitViewport(Jogo.LARGURA, Jogo.ALTURA, gamecamera);
         hud = new Hud(game.batch);
@@ -194,9 +234,6 @@ public class TelaFase1 implements Screen{
         criarPortaDoMapa();
         // centraliza a camera no meio do mundo
         gamecamera.position.set(Jogo.LARGURA / 2f, Jogo.ALTURA / 2f, 0);
-        //invoca o construtor do cavaleiro
-        texturaCavaleiro = new Texture("Idle.png");
-        cavaleiro = new Cavaleiro(100, 300, texturaCavaleiro, world);
     }
 
     @Override
@@ -209,13 +246,30 @@ public class TelaFase1 implements Screen{
         world.step(dt, 8, 3);
         gamecamera.update();
         renderer.setView(gamecamera);
-        cavaleiro.update(dt);
+        
+        for (Personagem p : personagens) {
+            p.update(dt);
+        }
 
-        if (cavaleiro.caiuNoBuraco()){
+        // Verifica se quer trocar de personagem (C)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+        // Desativa o anterior
+        personagens.get(indiceAtivo).setControlavel(false);
+        
+        // Muda para o próximo
+        indiceAtivo = (indiceAtivo + 1) % personagens.size;
+        
+        // Ativa o novo
+        personagens.get(indiceAtivo).setControlavel(true);
+        System.out.println("Personagem ativo: " + indiceAtivo);
+    }
+
+        Personagem ativo = personagens.get(indiceAtivo);
+        if (ativo.caiuNoBuraco()){
             game.setScreen(new TelaGameOver(game));
         }
         if (passouDeFase) {
-        game.setScreen(new TelaVitoria(game));
+            game.setScreen(new TelaVitoria(game));
         }
     }
 
@@ -229,10 +283,12 @@ public class TelaFase1 implements Screen{
         // desenha mapa
         renderer.render();
 
-        // desenha o cavaleiro
         game.batch.setProjectionMatrix(gamecamera.combined);
         game.batch.begin();
-        cavaleiro.render(game.batch);
+        // desenha os personagens
+        for (Personagem p : personagens) {
+            p.render(game.batch);
+        }
         game.batch.end();
 
         debugRenderer.render(world, gamecamera.combined);
@@ -269,8 +325,12 @@ public class TelaFase1 implements Screen{
         renderer.dispose();
         hud.stage.dispose();
         texturaCavaleiro.dispose();
+        texturaArqueiro.dispose();
+        texturaMago.dispose();
         world.dispose(); 
-        cavaleiro.dispose();
+        for (Personagem p : personagens) {
+            p.dispose();
+        }
         debugRenderer.dispose();
     }
 
