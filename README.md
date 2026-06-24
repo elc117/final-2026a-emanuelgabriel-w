@@ -153,19 +153,42 @@ Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar"
 
 **Gabriel**: Mudei o sprite do cavaleiro pra combinar mais com os outro 2, adicionei a habilidade de fazer o cavaleiro agachar apertando "E", nesse estado os outros personagem podem usar ele de plataforma, também deixei ele imune aos espinhos porque sua armadura o protege. Adicionei a habilidade de pulo duplo para a maga, essa foi bem tranquila de adicionar.
 
-## Como rodar no VScode
-cd gdx-1.13.0/a-simple-game  
-./gradlew html:dist  
-cd html/build/dist  
-python -m http.server  
+## Diagrama de Classes
+![diagrama de classes](/midias/Diagrama-classes_Advance.png)
+Ferramenta usada: Mermaid.live
+
+## Exemplo Final do Projeto
+![video exemplo](/midias/advance-exemplo-final.gif)
+
+## Como executar
+
+### Pré-requisitos
+- Java JDK 8, 17, ou 21 instalado
+- Python instalado
+- Permissão para executar o Gradle Wrapper (`gradlew`)
+
+### Passos
+1. Abra um terminal no diretório do projeto
+2. Entre na pasta do jogo:
+   `cd gdx-1.13.0/a-simple-game`
+3. Gere a build HTML:
+   `./gradlew html:dist`
+4. Inicie um servidor local na pasta de distribuição:
+   `cd html/build/dist`  
+   `python3 -m http.server`
 
 ## Fontes
 
-https://github.com/elc117/gamification-2025b-caua-spamton-g-spamton  
-https://youtube.com/playlist?list=PLZm85UZQLd2SXQzsF-a0-pPF6IWDDdrXt&si=IkKlzOw2SrlfgOQy  
-https://libgdx.com/wiki/graphics/2d/orthographic-camera  
+Projeto UniVenture UFSM :https://github.com/elc117/gamification-2025b-caua-spamton-g-spamton  
+Playlist LibGDX - Super Mario Bros: https://youtube.com/playlist?list=PLZm85UZQLd2SXQzsF-a0-pPF6IWDDdrXt&si=IkKlzOw2SrlfgOQy  
+Site Oficial do libGDX: https://libgdx.com/wiki/graphics/2d/orthographic-camera  
 Repositório da Disciplina  
+
+Inteligências artificiais usadas: Google Gemini, Claude e Copilot.
 
 Fundo da fase 1: https://craftpix.net/freebies/free-mountain-backgrounds-pixel-art/  
 Tiles das fases: https://www.spriters-resource.com/game_boy_advance/sma/asset/51433/  
-Tiled Map Editor: https://www.mapeditor.org/
+Tiled Map Editor: https://www.mapeditor.org/  
+Fundo da Fase: https://es.pinterest.com/pin/228909593555117616/  
+Espinhos da Fase: https://omniclause.itch.io/spikes  
+Skins de Texto: https://github.com/libgdx/libgdx/blob/master/extensions/gdx-tools/assets/uiskin.json  

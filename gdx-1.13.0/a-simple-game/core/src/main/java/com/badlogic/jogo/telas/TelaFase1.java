@@ -323,7 +323,7 @@ public class TelaFase1 implements Screen{
         }
         game.batch.end();
 
-        debugRenderer.render(world, gamecamera.combined);
+        // debugRenderer.render(world, gamecamera.combined);
         // desenha o hud por cima
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
