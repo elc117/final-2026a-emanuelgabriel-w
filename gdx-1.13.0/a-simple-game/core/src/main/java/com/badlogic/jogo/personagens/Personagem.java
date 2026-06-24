@@ -19,7 +19,7 @@ public abstract class Personagem {
     // Constantes de movimento
     protected static final float VELOCIDADE_MOVIMENTO = 150f;
     protected static final float FORCA_PULO = 120f;
-    protected static final float LARGURA_SPRITE = 96f;
+    protected static final float LARGURA_SPRITE = 64f;
 
     public Personagem(float x, float y, float velocidade, Texture textura) {
         this.x = x;
@@ -31,6 +31,10 @@ public abstract class Personagem {
 
     // lógica comum de movimento
     protected void atualizarMovimento(float dt) {
+        // Atualiza posição
+        x = body.getPosition().x - LARGURA_SPRITE / 2;
+        y = body.getPosition().y - LARGURA_SPRITE / 2;
+
         if (!controlavel) return;
         float velX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -49,10 +53,6 @@ public abstract class Personagem {
             noChao = false;
         }
 
-        // Atualiza posição
-        x = body.getPosition().x - LARGURA_SPRITE / 2;
-        y = body.getPosition().y - LARGURA_SPRITE / 2;
-
         // Limites da tela
         if (x < 0) {
             x = 0;
@@ -67,6 +67,9 @@ public abstract class Personagem {
     
     public void setControlavel(boolean controlavel) {
         this.controlavel = controlavel;
+        if (!controlavel && body != null) {
+            body.setLinearVelocity(0, 0);
+        }
     }
     
     public boolean isControlavel() {
@@ -91,6 +94,9 @@ public abstract class Personagem {
 
     public void noChao() {
         noChao = true;
+        if (this instanceof Mago) {
+            ((Mago) this).resetarPuloPendente();
+        }
     }
 
     public void deixouChao() {

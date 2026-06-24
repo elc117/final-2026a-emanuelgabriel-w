@@ -146,7 +146,10 @@ Adicionei a lógica de cair no buraco na classe do personagem, que é acionada q
 Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar" o personagem na parede.
 
 ### Dia 22/06
-**Gabriel**: Adicionei os outros 2 personagens que faltavam, eles estavam colidindo e deslizando entre si, então configurei um filtro pra remover essa colisão, ainda tem alguns problemas de hitbox desalinhada e atualização da textura com a hitbox que vou arrumar amanhã, também preogramei pro jogador poder mudar o personagem que está utilizando apertando a tecla C.
+**Gabriel**: Adicionei os outros 2 personagens que faltavam, eles estavam colidindo e deslizando entre si, então configurei um filtro pra remover essa colisão, ainda tem alguns problemas de hitbox desalinhada e atualização da textura com a hitbox que vou arrumar amanhã, também programei pro jogador poder mudar o personagem que está utilizando apertando a tecla C.
+
+### Dia 23/06
+**Gabriel**: Mudei o sprite do cavaleiro pra combinar mais com os outro 2, adicionei a habilidade de fazer o cavaleiro agachar apertando "E", nesse estado os outros personagem podem usar ele de plataforma, também deixei ele imune aos espinhos porque sua armadura o protege. Adicionei a habilidade de pulo duplo para a maga, essa foi bem tranquila de adicionar.
 
 ## Como rodar no VScode
 cd gdx-1.13.0/a-simple-game  

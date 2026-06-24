@@ -34,11 +34,11 @@ public class TelaFase1 implements Screen{
     private Hud hud;
     // personagens
     private Texture texturaCavaleiro;
+    private Texture texturaAgachado;    
     private Texture texturaArqueiro;
     private Texture texturaMago;
     private Array<Personagem> personagens;
     private int indiceAtivo = 0;
-    private Texture texturaPersonagem;
     // Ferramentas do TiledMap
     private TmxMapLoader maploader; // Carrega mapa
     private TiledMap map; // Guarda os dados
@@ -91,7 +91,7 @@ public class TelaFase1 implements Screen{
     private void criarEspinhosDoMapa() {
         com.badlogic.gdx.maps.MapObjects objetos = map.getLayers().get("spikes").getObjects();
 
-        // percorre os espinhos que são polygonais
+        // percorre os espinhos que são poligonais
         for (com.badlogic.gdx.maps.objects.PolygonMapObject obj : 
             objetos.getByType(com.badlogic.gdx.maps.objects.PolygonMapObject.class)) {
 
@@ -100,7 +100,7 @@ public class TelaFase1 implements Screen{
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyDef.BodyType.StaticBody;
                 // a posiçao do retangulo no Tiled já vem com x,y absolutos
-                bdef.position.set(polygon.getX(), polygon.getY());
+                bdef.position.set(0, 0);
 
                 Body body = world.createBody(bdef);
                 // marca esse corpo como "spike" - serva depois para dectar se o personagem tocou em algo que
@@ -109,7 +109,8 @@ public class TelaFase1 implements Screen{
 
                 PolygonShape shape = new PolygonShape();
                 // getTransformedVertices() retorna os vértices já ajustados
-                shape.set(polygon.getTransformedVertices());
+                float[] verts = polygon.getTransformedVertices();
+                shape.set(verts);
 
                 FixtureDef fdef = new FixtureDef();
                 fdef.shape = shape;
@@ -158,13 +159,14 @@ public class TelaFase1 implements Screen{
         personagens = new Array<>();
         
         texturaCavaleiro = new Texture("cavaleiro.png");
-        personagens.add(new Cavaleiro(100, 300, texturaCavaleiro, world));
+        texturaAgachado = new Texture("agachado.png");
+        personagens.add(new Cavaleiro(100, 40, texturaCavaleiro, texturaAgachado, world));
         
-        texturaArqueiro = new Texture("arqueiro.png"); // Mude se tiver textura diferente
-        personagens.add(new Arqueiro(100, 300, texturaArqueiro, world));
+        texturaArqueiro = new Texture("arqueiro.png");
+        personagens.add(new Arqueiro(70, 40, texturaArqueiro, world));
         
-        texturaMago = new Texture("mago.png"); // Mude se tiver textura diferente
-        personagens.add(new Mago(100, 300, texturaMago, world));
+        texturaMago = new Texture("mago.png");
+        personagens.add(new Mago(40, 40, texturaMago, world));
 
         // configura o contato entre os personagens e o chão
         world.setContactListener(new ContactListener() {
@@ -181,6 +183,15 @@ public class TelaFase1 implements Screen{
                         
                         if ("chao".equals(userDataOutro)) {
                             p.noChao();
+                        }
+                        if ("cavaleiro".equals(userDataOutro)) {
+                            p.noChao();
+                        }
+                        if ("spike".equals(userDataOutro)) {
+                            // Cavaleiro é imune aos espinhos
+                            if (!(p instanceof Cavaleiro)) {
+                                game.setScreen(new TelaGameOver(game));
+                            }
                         }
                     }
                 }
@@ -271,6 +282,12 @@ public class TelaFase1 implements Screen{
         if (passouDeFase) {
             game.setScreen(new TelaVitoria(game));
         }
+        if (ativo instanceof Cavaleiro) {
+            Cavaleiro cav = (Cavaleiro) ativo;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                cav.usarHabilidade();
+            }
+        }
     }
 
     @Override
@@ -325,6 +342,7 @@ public class TelaFase1 implements Screen{
         renderer.dispose();
         hud.stage.dispose();
         texturaCavaleiro.dispose();
+        texturaAgachado.dispose();
         texturaArqueiro.dispose();
         texturaMago.dispose();
         world.dispose(); 
