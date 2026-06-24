@@ -20,7 +20,7 @@
   <object id="7" x="432.348" y="240.167" width="207.637" height="159.5"/>
  </objectgroup>
  <objectgroup id="7" name="door">
-  <object id="8" x="496" y="208" width="-7.5" height="31.875"/>
+  <object id="8" x="496" y="208" width="15.875" height="31.875"/>
  </objectgroup>
  <objectgroup id="6" name="spikes">
   <object id="13" x="311.818" y="338.727">

@@ -46,6 +46,7 @@ public class TelaFase1 implements Screen{
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private boolean passouDeFase = false;
+    private boolean morreu = false;
 
     // metodo para ler a camada "ground" do level1, transformando cada retangulo desenhado
     // no Tiled em um corpo fisico
@@ -82,6 +83,8 @@ public class TelaFase1 implements Screen{
             FixtureDef fdef = new FixtureDef();
             fdef.shape = shape;
             fdef.friction = 0.4f;
+            fdef.filter.categoryBits = 0x0001;
+            fdef.filter.maskBits = 0x0002;
 
             body.createFixture(fdef);
             shape.dispose();
@@ -101,6 +104,9 @@ public class TelaFase1 implements Screen{
                 bdef.type = BodyDef.BodyType.StaticBody;
                 // a posiçao do retangulo no Tiled já vem com x,y absolutos
                 bdef.position.set(polygon.getX(), polygon.getY());
+                // tive que adicionar isso aqui por conta que o getTransformedVertices() tras as coordenadas
+                // X e Y na ancora do corpo, o Box2D soma os dois e a colisão saí da tela.
+                bdef.position.set(0, 0);
 
                 Body body = world.createBody(bdef);
                 // marca esse corpo como "spike" - serva depois para dectar se o personagem tocou em algo que
@@ -115,6 +121,8 @@ public class TelaFase1 implements Screen{
                 fdef.shape = shape;
                 // nao empurra o personagem, apenas detecta quando algo o toca
                 fdef.isSensor = true;
+                fdef.filter.categoryBits = 0x0001;
+                fdef.filter.maskBits = 0x0002;
 
                 body.createFixture(fdef);
                 shape.dispose();
@@ -142,6 +150,8 @@ public class TelaFase1 implements Screen{
                 FixtureDef fdef = new FixtureDef();
                 fdef.shape = shape;
                 fdef.isSensor = true;
+                fdef.filter.categoryBits = 0x0001;
+                fdef.filter.maskBits = 0x0002;
 
                 body.createFixture(fdef);
                 shape.dispose();
@@ -172,6 +182,8 @@ public class TelaFase1 implements Screen{
             public void beginContact(Contact contact) {
                 Body bodyA = contact.getFixtureA().getBody();
                 Body bodyB = contact.getFixtureB().getBody();
+                Object userDataA = bodyA.getUserData();
+                Object userDataB = bodyB.getUserData();
                 
                 // Verifica qual personagem tocou em algo
                 for (Personagem p : personagens) {
@@ -182,7 +194,17 @@ public class TelaFase1 implements Screen{
                         if ("chao".equals(userDataOutro)) {
                             p.noChao();
                         }
+                        if ("spike".equals(userDataOutro)) {
+                            // se encostar nos espinho morreu = true
+                            morreu = true;
+                        }
                     }
+                }
+                // Detecta porta (só o ativo passa de fase)
+                Personagem ativo = personagens.get(indiceAtivo);
+                if ((ativo.getBody() == bodyA && "porta".equals(userDataB)) ||
+                    (ativo.getBody() == bodyB && "porta".equals(userDataA))) {
+                    passouDeFase = true;
                 }
             }
             
@@ -190,8 +212,7 @@ public class TelaFase1 implements Screen{
             public void endContact(Contact contact) {
                 Body bodyA = contact.getFixtureA().getBody();
                 Body bodyB = contact.getFixtureB().getBody();
-                Object userDataA = bodyA.getUserData();
-                Object userDataB = bodyB.getUserData();
+
                 
                 // Verifica qual personagem saiu do contato
                 for (Personagem p : personagens) {
@@ -205,12 +226,6 @@ public class TelaFase1 implements Screen{
                     }
                 }
                 
-                // Detecta porta (só o ativo passa de fase)
-                Personagem ativo = personagens.get(indiceAtivo);
-                if ((ativo.getBody() == bodyA && "porta".equals(userDataB)) ||
-                    (ativo.getBody() == bodyB && "porta".equals(userDataA))) {
-                    passouDeFase = true;
-                }
             }
         
             @Override
@@ -270,6 +285,10 @@ public class TelaFase1 implements Screen{
         }
         if (passouDeFase) {
             game.setScreen(new TelaVitoria(game));
+        }
+        if (morreu) {
+            game.setScreen(new TelaGameOver(game));
+            return;
         }
     }
 

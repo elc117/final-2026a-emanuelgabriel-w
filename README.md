@@ -148,6 +148,9 @@ Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar"
 ### Dia 22/06
 **Gabriel**: Adicionei os outros 2 personagens que faltavam, eles estavam colidindo e deslizando entre si, então configurei um filtro pra remover essa colisão, ainda tem alguns problemas de hitbox desalinhada e atualização da textura com a hitbox que vou arrumar amanhã, também preogramei pro jogador poder mudar o personagem que está utilizando apertando a tecla C.
 
+### Dia 23/06
+***Emanuel***: Adicionei a morte por espinho, antes a colisão do espinho estava dando erro por conta do `getTransformedVertices()` trazia as coordenadas X e Y absolutas no mapa, quando passa X e Y na âncora do corpo junto, o Box2D soma os dois e a colisão foge do mapoa, então tive que adicionar `bdef.position.set(0,0);`. Depois disso, bastou fazer um boolean `morreu = False` que muda para `True`caso tenha contato nos espinhos, se `morreu = True` apenas troca para a tela de game over.
+
 ## Como rodar no VScode
 cd gdx-1.13.0/a-simple-game  
 ./gradlew html:dist  
