@@ -157,9 +157,6 @@ Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar"
 ![diagrama de classes](/midias/Diagrama-classes_Advance.png)
 Ferramenta usada: Mermaid.live
 
-## Exemplo Final do Projeto
-![video exemplo](/midias/advance-exemplo-final.gif)
-
 ## Como executar
 
 ### Pré-requisitos
@@ -176,6 +173,9 @@ Ferramenta usada: Mermaid.live
 4. Inicie um servidor local na pasta de distribuição:
    `cd html/build/dist`  
    `python3 -m http.server`
+
+## Exemplo Final do Projeto
+![video exemplo](/midias/advance-exemplo-final.gif)
 
 ## Fontes
 
