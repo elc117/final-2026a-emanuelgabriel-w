@@ -153,6 +153,10 @@ Também removi o atrito, pois percebi que, dessa maneira, era possível "grudar"
 
 **Gabriel**: Mudei o sprite do cavaleiro pra combinar mais com os outro 2, adicionei a habilidade de fazer o cavaleiro agachar apertando "E", nesse estado os outros personagem podem usar ele de plataforma, também deixei ele imune aos espinhos porque sua armadura o protege. Adicionei a habilidade de pulo duplo para a maga, essa foi bem tranquila de adicionar.
 
+### Dia 24/06:
+**Gabriel**: Atualizei o resultado final na página do itch.io:
+https://gabuz52.itch.io/advancetogether
+
 ## Diagrama de Classes
 ![diagrama de classes](/midias/Diagrama-classes_Advance.png)
 Ferramenta usada: Mermaid.live
@@ -192,3 +196,6 @@ Tiled Map Editor: https://www.mapeditor.org/
 Fundo da Fase: https://es.pinterest.com/pin/228909593555117616/  
 Espinhos da Fase: https://omniclause.itch.io/spikes  
 Skins de Texto: https://github.com/libgdx/libgdx/blob/master/extensions/gdx-tools/assets/uiskin.json  
+Sprite do Cavaleiro: https://craftpix.net/freebies/free-knight-character-sprites-pixel-art/
+Sprite da Maga: https://craftpix.net/freebies/free-wizard-sprite-sheets-pixel-art/
+Sprite do Arqueiro: https://craftpix.net/freebies/free-skeleton-pixel-art-sprite-sheets/
