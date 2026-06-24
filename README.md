@@ -196,6 +196,6 @@ Tiled Map Editor: https://www.mapeditor.org/
 Fundo da Fase: https://es.pinterest.com/pin/228909593555117616/  
 Espinhos da Fase: https://omniclause.itch.io/spikes  
 Skins de Texto: https://github.com/libgdx/libgdx/blob/master/extensions/gdx-tools/assets/uiskin.json  
-Sprite do Cavaleiro: https://craftpix.net/freebies/free-knight-character-sprites-pixel-art/
-Sprite da Maga: https://craftpix.net/freebies/free-wizard-sprite-sheets-pixel-art/
-Sprite do Arqueiro: https://craftpix.net/freebies/free-skeleton-pixel-art-sprite-sheets/
+Sprite do Cavaleiro: https://craftpix.net/freebies/free-knight-character-sprites-pixel-art/  
+Sprite da Maga: https://craftpix.net/freebies/free-wizard-sprite-sheets-pixel-art/  
+Sprite do Arqueiro: https://craftpix.net/freebies/free-skeleton-pixel-art-sprite-sheets/  
